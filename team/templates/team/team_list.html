@@ -58,7 +58,11 @@
             })
             .then(response => response.json())
             .then(data => {
-                console.log('Success:', data);
+                if (data.status === 'success') {
+                    window.location.href = `/teams/${data.team_name}/`;
+                } else {
+                    alert('Failed to update favorite team');
+                }
             })
             .catch((error) => {
                 console.error('Error:', error);
@@ -69,7 +73,7 @@
             const images = document.querySelectorAll('.logo-container img');
             images.forEach(image => {
                 image.addEventListener('click', function() {
-                    const imageName = this.src.split('/').pop();
+                    const imageName = this.src.split('/').slice(-2).join('/');
                     sendImageName(imageName);
                 });
             });
