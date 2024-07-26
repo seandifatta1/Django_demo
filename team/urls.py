@@ -38,7 +38,7 @@ team_names = [
 ]
 
 urlpatterns = [
-    path(f'teams/{team_name}/', views.team_view, {'team_name': team_name}, name=f'{team_name}_page') for team_name in
+    path(f'teams/{team_name}/', views.team_detail, {'team_name': team_name}, name=f'{team_name}_page') for team_name in
     team_names
 ]
 urlpatterns.append(path('teams/', views.team_list, name='team_list'))

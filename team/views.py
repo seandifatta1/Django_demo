@@ -9,11 +9,28 @@ from django.shortcuts import render
 from django.http import JsonResponse
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect
+from django.shortcuts import render, get_object_or_404
+from django.contrib.auth import get_user_model
+from .models import Team
+# from ../..
 
+User = get_user_model()
 
-def team_view(request, team_name):
-    return render(request, 'team/team_detail.html', {'team_name': team_name})
+def team_detail(request, team_name):
+    # Get the favorite team for the user
+    user = request.user
+    favorite_team = user.favorite_team
 
+    # Get the teams in the same division
+    team_name = team_name[0].upper() + team_name[1:]
+    team = get_object_or_404(Team, name=team_name)
+    teams_in_division = Team.objects.filter(division=team.division)
+
+    context = {
+        'favorite_team': favorite_team,
+        'teams_in_division': teams_in_division,
+    }
+    return render(request, 'team/team_detail.html', context)
 
 def team_list(request):
     teams = Team.objects.all().values('division', 'logo_path')

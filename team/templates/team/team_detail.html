@@ -1,12 +1,59 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Team Detail</title>
+    <style>
+        body {
+            font-size: 14px;
+        }
+        .favorite-team {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .favorite-team img {
+            width: 150px;
+            height: auto;
+        }
+        .division-teams {
+            text-align: center;
+        }
+        .division-teams h2 {
+            font-size: 18px;
+        }
+        .division-teams ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        .division-teams li {
+            display: inline-block;
+            margin: 10px;
+            text-align: center;
+        }
+        .division-teams img {
+            width: 80px;
+            height: auto;
+        }
+    </style>
 </head>
 <body>
-    <h1>{{ team_name }}</h1>
-    <!-- Additional content for the team detail page -->
+    <div class="favorite-team">
+        <h1>Favorite Team</h1>
+        <img src="{% static 'team_logos/'|add:user.favorite_team|add:'.png' %}" alt="{{ user.favorite_team }}">
+        <p>{{ user.favorite_team }}</p>
+    </div>
+    <div class="division-teams">
+        <h2>Other Teams in {{ team.division }}</h2>
+        <ul>
+            {% for team in teams_in_division %}
+            <li>
+                <img src="{% static 'team_logos/'|add:team.name|add:'.png' %}" alt="{{ team.name }}">
+                <p>{{ team.name }}</p>
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
 </body>
 </html>
