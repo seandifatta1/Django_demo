@@ -1,36 +1,42 @@
-from django.shortcuts import render
-
 # Create your views here.
-from django.http import HttpResponse
-from team.models import Team
+import random
 from collections import defaultdict
-from django.http import JsonResponse
-from django.shortcuts import render
-from django.http import JsonResponse
-from django.contrib.auth.decorators import login_required
-from django.shortcuts import redirect
-from django.shortcuts import render, get_object_or_404
+
 from django.contrib.auth import get_user_model
+from django.http import JsonResponse
+from django.shortcuts import render, get_object_or_404
+
 from .models import Team
+
 # from ../..
 
 User = get_user_model()
+
 
 def team_detail(request, team_name):
     # Get the favorite team for the user
     user = request.user
     favorite_team = user.favorite_team
 
-    # Get the teams in the same division
-    team_name = team_name[0].upper() + team_name[1:]
+    # Ensure the team_name is properly formatted
+    team_name = team_name[0].upper() + team_name[1:].lower()
     team = get_object_or_404(Team, name=team_name)
-    teams_in_division = Team.objects.filter(division=team.division)
+
+    # Get the teams in the same division sorted by wins in descending order
+    teams_in_division = Team.objects.filter(division=team.division).order_by('-wins')
+
+    # Select a random opponent from the teams in the same division, excluding the favorite team
+    opponent = random.choice([t for t in teams_in_division if t.name != team_name])
 
     context = {
         'favorite_team': favorite_team,
         'teams_in_division': teams_in_division,
+        'team': team,
+        'opponent': opponent,
     }
+
     return render(request, 'team/team_detail.html', context)
+
 
 def team_list(request):
     teams = Team.objects.all().values('division', 'logo_path')

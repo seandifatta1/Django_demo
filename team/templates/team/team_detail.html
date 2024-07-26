@@ -8,8 +8,11 @@
     <style>
         body {
             font-size: 14px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
-        .favorite-team {
+        .main-content {
             text-align: center;
             margin-bottom: 20px;
         }
@@ -17,43 +20,89 @@
             width: 150px;
             height: auto;
         }
-        .division-teams {
-            text-align: center;
+        .sidebar {
+            width: 60%;
         }
-        .division-teams h2 {
-            font-size: 18px;
+        .team-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
         }
-        .division-teams ul {
-            list-style-type: none;
-            padding: 0;
+        .team-table th, .team-table td {
+            border: 1px solid #000;
+            padding: 8px;
+            text-align: left;
         }
-        .division-teams li {
-            display: inline-block;
-            margin: 10px;
-            text-align: center;
+        .team-table th {
+            background-color: #f2f2f2;
         }
-        .division-teams img {
-            width: 80px;
+        .matchup {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 20px;
+        }
+        .matchup img {
+            width: 100px;
             height: auto;
+            margin: 0 20px;
+        }
+        .simulate-button {
+            margin-top: 20px;
+        }
+        .simulate-button button {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
         }
     </style>
 </head>
 <body>
-    <div class="favorite-team">
-        <h1>Favorite Team</h1>
-        <img src="{% static 'team_logos/'|add:user.favorite_team|add:'.png' %}" alt="{{ user.favorite_team }}">
-        <p>{{ user.favorite_team }}</p>
+    <div class="main-content">
+        <div class="favorite-team">
+            <h1>Favorite Team: {{ team.name }}</h1>
+            <img src="{% static 'team_logos/'|add:favorite_team|add:'.png' %}" alt="{{ favorite_team }}">
+        </div>
     </div>
-    <div class="division-teams">
-        <h2>Other Teams in {{ team.division }}</h2>
-        <ul>
-            {% for team in teams_in_division %}
-            <li>
-                <img src="{% static 'team_logos/'|add:team.name|add:'.png' %}" alt="{{ team.name }}">
-                <p>{{ team.name }}</p>
-            </li>
-            {% endfor %}
-        </ul>
+    <div class="sidebar">
+        <h2>Teams in {{ team.division }}</h2>
+        <table class="team-table">
+            <thead>
+                <tr>
+                    <th>Team</th>
+                    <th>Wins</th>
+                    <th>Losses</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for team in teams_in_division %}
+                <tr>
+                    <td>{{ team.name }}</td>
+                    <td>{{ team.wins }}</td>
+                    <td>{{ team.losses }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
     </div>
+    <div class="matchup">
+        <div class="team">
+            <img src="{% static 'team_logos/'|add:favorite_team|add:'.png' %}" alt="{{ favorite_team }}">
+            <p>{{ favorite_team }}</p>
+        </div>
+        <div class="vs">VS</div>
+        <div class="team">
+            <img src="{% static 'team_logos/'|add:opponent.name|add:'.png' %}" alt="{{ opponent.name }}">
+            <p>{{ opponent.name }}</p>
+        </div>
+    </div>
+    <div class="simulate-button">
+        <button onclick="simulateGame()">Simulate Game</button>
+    </div>
+    <script>
+        function simulateGame() {
+            alert("Game simulated! (This could trigger a backend call to simulate the game)");
+        }
+    </script>
 </body>
 </html>
