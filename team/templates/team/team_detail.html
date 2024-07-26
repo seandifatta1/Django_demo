@@ -12,97 +12,147 @@
             flex-direction: column;
             align-items: center;
         }
+
         .main-content {
             text-align: center;
             margin-bottom: 20px;
         }
+
         .favorite-team img {
             width: 150px;
             height: auto;
         }
+
         .sidebar {
             width: 60%;
         }
+
         .team-table {
             width: 100%;
             border-collapse: collapse;
             margin-bottom: 20px;
         }
+
         .team-table th, .team-table td {
             border: 1px solid #000;
             padding: 8px;
             text-align: left;
         }
+
         .team-table th {
             background-color: #f2f2f2;
         }
+
         .matchup {
             display: flex;
             justify-content: center;
             align-items: center;
             margin-top: 20px;
         }
+
         .matchup img {
             width: 100px;
             height: auto;
             margin: 0 20px;
         }
+
         .simulate-button {
             margin-top: 20px;
         }
+
         .simulate-button button {
             padding: 10px 20px;
             font-size: 16px;
             cursor: pointer;
         }
     </style>
-</head>
-<body>
-    <div class="main-content">
-        <div class="favorite-team">
-            <h1>Favorite Team: {{ team.name }}</h1>
-            <img src="{% static 'team_logos/'|add:favorite_team|add:'.png' %}" alt="{{ favorite_team }}">
-        </div>
-    </div>
-    <div class="sidebar">
-        <h2>Teams in {{ team.division }}</h2>
-        <table class="team-table">
-            <thead>
-                <tr>
-                    <th>Team</th>
-                    <th>Wins</th>
-                    <th>Losses</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for team in teams_in_division %}
-                <tr>
-                    <td>{{ team.name }}</td>
-                    <td>{{ team.wins }}</td>
-                    <td>{{ team.losses }}</td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-    </div>
-    <div class="matchup">
-        <div class="team">
-            <img src="{% static 'team_logos/'|add:favorite_team|add:'.png' %}" alt="{{ favorite_team }}">
-            <p>{{ favorite_team }}</p>
-        </div>
-        <div class="vs">VS</div>
-        <div class="team">
-            <img src="{% static 'team_logos/'|add:opponent.name|add:'.png' %}" alt="{{ opponent.name }}">
-            <p>{{ opponent.name }}</p>
-        </div>
-    </div>
-    <div class="simulate-button">
-        <button onclick="simulateGame()">Simulate Game</button>
-    </div>
     <script>
         function simulateGame() {
-            alert("Game simulated! (This could trigger a backend call to simulate the game)");
+            const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+            const favoriteTeam = "{{ team.name }}";  // Ensure this is the correct variable for the team name
+
+            fetch("{% url 'simulate_game' %}", {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': csrfToken
+                },
+                body: JSON.stringify({'favorite_team': favoriteTeam})
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.status === 'success') {
+                        const teamsTbody = document.getElementById('teams-tbody');
+                        teamsTbody.innerHTML = ''; // Clear existing table rows
+
+                        // Populate the table with new data
+                        data.teams_in_division.forEach(team => {
+                            const row = document.createElement('tr');
+                            row.innerHTML = `
+                    <td>${team.name}</td>
+                    <td>${team.wins}</td>
+                    <td>${team.losses}</td>
+                `;
+                            teamsTbody.appendChild(row);
+                        });
+                    } else {
+                        alert('Simulation failed');
+                    }
+                })
+                .catch(error => console.error('Error:', error));
         }
+
+        document.addEventListener('DOMContentLoaded', function () {
+            const simulateButton = document.querySelector('.simulate-button button');
+            simulateButton.addEventListener('click', simulateGame);
+        });
+
     </script>
+</head>
+<body>
+<div class="main-content">
+    <div class="favorite-team">
+        <h1>Favorite Team: {{ team.name }}</h1>
+        <img src="{% static 'team_logos/'|add:favorite_team|add:'.png' %}" alt="{{ favorite_team }}">
+    </div>
+</div>
+<div class="sidebar">
+    <h2>Teams in {{ team.division }}</h2>
+    <table class="team-table">
+        <thead>
+        <tr>
+            <th>Team</th>
+            <th>Wins</th>
+            <th>Losses</th>
+        </tr>
+        </thead>
+        <tbody id="teams-tbody">
+        {% for team in teams_in_division %}
+            <tr>
+                <td>{{ team.name }}</td>
+                <td>{{ team.wins }}</td>
+                <td>{{ team.losses }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+<div class="matchup">
+    <div class="team">
+        <img src="{% static 'team_logos/'|add:favorite_team|add:'.png' %}" alt="{{ favorite_team }}">
+        <p>{{ favorite_team }}</p>
+    </div>
+    <div class="vs">VS</div>
+    <div class="team">
+        <img src="{% static 'team_logos/'|add:opponent.name|add:'.png' %}" alt="{{ opponent.name }}">
+        <p>{{ opponent.name }}</p>
+    </div>
+</div>
+<div class="simulate-button">
+    <form method="post" id="simulate-game-form">
+        {% csrf_token %}
+        <button type="button">Simulate Game</button>
+    </form>
+</div>
 </body>
 </html>

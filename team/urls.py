@@ -44,3 +44,5 @@ urlpatterns = [
 urlpatterns.append(path('teams/', views.team_list, name='team_list'))
 urlpatterns.append(path('handle-click/', views.handle_click, name='handle_click'),  # Ensure this line is correct
                    )
+urlpatterns.append(path('simulate_game/', views.simulate_game, name='simulate_game'),
+                   )
