@@ -64,6 +64,11 @@
             padding: 10px 20px;
             font-size: 16px;
             cursor: pointer;
+            margin-right: 10px;
+        }
+
+        .hidden {
+            display: none;
         }
     </style>
     <script>
@@ -82,19 +87,7 @@
                 .then(response => response.json())
                 .then(data => {
                     if (data.status === 'success') {
-                        const teamsTbody = document.getElementById('teams-tbody');
-                        teamsTbody.innerHTML = ''; // Clear existing table rows
-
-                        // Populate the table with new data
-                        data.teams_in_division.forEach(team => {
-                            const row = document.createElement('tr');
-                            row.innerHTML = `
-                    <td>${team.name}</td>
-                    <td>${team.wins}</td>
-                    <td>${team.losses}</td>
-                `;
-                            teamsTbody.appendChild(row);
-                        });
+                        window.location.reload();
                     } else {
                         alert('Simulation failed');
                     }
@@ -102,11 +95,41 @@
                 .catch(error => console.error('Error:', error));
         }
 
-        document.addEventListener('DOMContentLoaded', function () {
-            const simulateButton = document.querySelector('.simulate-button button');
-            simulateButton.addEventListener('click', simulateGame);
-        });
+        function resetWinsLosses() {
+            const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
 
+            fetch("{% url 'reset_wins_losses' %}", {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': csrfToken
+                }
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.status === 'success') {
+                        window.location.reload();
+                    } else {
+                        alert('Reset failed');
+                    }
+                })
+                .catch(error => console.error('Error:', error));
+        }
+
+        document.addEventListener('DOMContentLoaded', function () {
+            const simulateButton = document.querySelector('.simulate-button button.simulate');
+            simulateButton.addEventListener('click', simulateGame);
+
+            const resetButton = document.querySelector('.simulate-button button.reset');
+            resetButton.addEventListener('click', resetWinsLosses);
+
+            // Check if the favorite team has 17 games and show the "See Results" button
+            const favoriteTeamWins = parseInt("{{ team.wins }}", 10);
+            const favoriteTeamLosses = parseInt("{{ team.losses }}", 10);
+            if (favoriteTeamWins + favoriteTeamLosses === 17) {
+                document.getElementById('see-results-button').classList.remove('hidden');
+            }
+        });
     </script>
 </head>
 <body>
@@ -151,8 +174,12 @@
 <div class="simulate-button">
     <form method="post" id="simulate-game-form">
         {% csrf_token %}
-        <button type="button">Simulate Game</button>
+        <button type="button" class="simulate">Simulate Game</button>
+        <button type="button" class="reset">Reset Wins/Losses</button>
     </form>
+</div>
+<div id="see-results-button" class="hidden">
+    <button type="button">See Results</button>
 </div>
 </body>
 </html>

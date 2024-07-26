@@ -46,3 +46,5 @@ urlpatterns.append(path('handle-click/', views.handle_click, name='handle_click'
                    )
 urlpatterns.append(path('simulate_game/', views.simulate_game, name='simulate_game'),
                    )
+urlpatterns.append(path('reset_wins_losses/', views.reset_wins_losses, name='reset_wins_losses'),
+                   )

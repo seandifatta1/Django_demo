@@ -85,3 +85,14 @@ def simulate_game(request):
 
         return JsonResponse(response_data)
     return JsonResponse({'status': 'failed'}, status=400)
+
+def reset_wins_losses(request):
+    if request.method == 'POST':
+        teams = Team.objects.all()
+        for team in teams:
+            team.wins = 0
+            team.losses = 0
+            team.save()
+
+        return JsonResponse({'status': 'success'})
+    return JsonResponse({'status': 'failed'}, status=400)
