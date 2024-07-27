@@ -1,10 +1,9 @@
+{% extends 'base.html' %}
 {% load static %}
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Team List</title>
+
+{% block title %}Team List{% endblock %}
+
+{% block extra_head %}
     <style>
         body {
             font-size: 14px;
@@ -42,6 +41,28 @@
             cursor: pointer;
         }
     </style>
+{% endblock %}
+
+{% block content %}
+    <h1>Teams by Division</h1>
+    <div class="container">
+        <form method="post" id="imageForm">
+            {% csrf_token %}
+        </form>
+        {% for division, logo_paths in teams_by_division.items %}
+        <div class="division-column">
+            <h2>{{ division }}</h2>
+            <div class="logo-container">
+                {% for logo_path in logo_paths %}
+                <img src="{% static logo_path %}" alt="{{ division }} Logo" onclick="sendImageName('{{ logo_path }}')">
+                {% endfor %}
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+{% endblock %}
+
+{% block extra_script %}
     <script>
         function sendImageName(imageName) {
             const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
@@ -79,23 +100,4 @@
             });
         });
     </script>
-</head>
-<body>
-    <h1>Teams by Division</h1>
-    <div class="container">
-        <form method="post" id="imageForm">
-            {% csrf_token %}
-        </form>
-        {% for division, logo_paths in teams_by_division.items %}
-        <div class="division-column">
-            <h2>{{ division }}</h2>
-            <div class="logo-container">
-                {% for logo_path in logo_paths %}
-                <img src="{% static logo_path %}" alt="{{ division }} Logo" onclick="sendImageName('{{ logo_path }}')">
-                {% endfor %}
-            </div>
-        </div>
-        {% endfor %}
-    </div>
-</body>
-</html>
+{% endblock %}
