@@ -25,6 +25,7 @@
             text-align: center;
             font-size: 16px;
             margin-bottom: 10px;
+            color: #333; /* Darker text color for better readability */
         }
         .logo-container {
             flex-grow: 1;
@@ -40,11 +41,24 @@
             height: auto;
             cursor: pointer;
         }
+        .header {
+            text-align: center;
+            padding: 20px;
+            background-color: #YourPrimaryColor; /* Replace with your primary color */
+            border-bottom: 2px solid #YourAccentColor; /* Optional: replace with a complementary color */
+        }
+        .header h1 {
+            font-size: 24px;
+            color: #YourTextColor; /* Replace with a color that contrasts well with the background */
+            margin: 0;
+        }
     </style>
 {% endblock %}
 
 {% block content %}
-    <h1>Teams by Division</h1>
+    <div class="header">
+        <h1>Select Your Favorite Team!</h1>
+    </div>
     <div class="container">
         <form method="post" id="imageForm">
             {% csrf_token %}

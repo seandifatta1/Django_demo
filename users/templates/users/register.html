@@ -1,16 +1,152 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Register</title>
-</head>
-<body>
-    <h2>Register</h2>
-    <form method="post">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit">Register</button>
-    </form>
-</body>
-</html>
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Register{% endblock %}
+
+{% block extra_head %}
+    <style>
+        body {
+            font-size: 14px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background-color: #f0f0f0;
+            margin: 0;
+            padding: 0;
+        }
+
+        .register-container {
+            width: 100%;
+            max-width: 400px;
+            margin: 50px auto;
+            background-color: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            padding: 20px;
+            text-align: center;
+        }
+
+        .register-container h2 {
+            margin-bottom: 20px;
+            color: #002244; /* Dark blue */
+        }
+
+        .register-container form {
+            display: flex;
+            flex-direction: column;
+            align-items: stretch;
+        }
+
+        .register-container label {
+            margin: 10px 0 5px;
+            text-align: left;
+            width: 100%;
+        }
+
+        .register-container input {
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+
+        .register-container button {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            background-color: #002244; /* Dark blue */
+            color: white;
+            border: none;
+            border-radius: 4px;
+            transition: background-color 0.3s;
+        }
+
+        .register-container button:hover {
+            background-color: #001122; /* Darker blue */
+        }
+
+        .password-hints {
+            text-align: left;
+            margin-top: -10px;
+            margin-bottom: 10px;
+        }
+
+        .password-hints p {
+            margin: 5px 0;
+            font-size: 12px;
+        }
+
+        .password-hints .weak {
+            color: red;
+        }
+
+        .password-hints .medium {
+            color: orange;
+        }
+
+        .password-hints .strong {
+            color: green;
+        }
+    </style>
+{% endblock %}
+
+{% block content %}
+    <div class="register-container">
+        <h2>Register</h2>
+        <form method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <div class="password-hints" id="password-hints">
+                <p id="hint1" class="weak">Your password can't be too similar to your other personal information.</p>
+                <p id="hint2" class="medium">Your password must contain at least 8 characters.</p>
+                <p id="hint3" class="strong">Your password must contain at least one number and/or symbol.</p>
+            </div>
+            <button type="submit">Register</button>
+        </form>
+    </div>
+{% endblock %}
+
+{% block extra_script %}
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const passwordInput = document.querySelector('input[type="password"]');
+            const hint1 = document.getElementById('hint1');
+            const hint2 = document.getElementById('hint2');
+            const hint3 = document.getElementById('hint3');
+
+            passwordInput.addEventListener('input', function () {
+                const value = passwordInput.value;
+
+                // Reset classes
+                hint1.className = '';
+                hint2.className = '';
+                hint3.className = '';
+
+                // Check if password is similar to name or email
+                const nameInput = document.querySelector('input[name="name"]');
+                const emailInput = document.querySelector('input[name="email"]');
+                if (nameInput && emailInput) {
+                    if (value.includes(nameInput.value) || value.includes(emailInput.value)) {
+                        hint1.classList.add('weak');
+                    } else {
+                        hint1.classList.remove('weak');
+                    }
+                }
+
+                // Check password length
+                if (value.length < 8) {
+                    hint2.classList.add('weak');
+                } else {
+                    hint2.classList.add('medium');
+                }
+
+                // Check if password contains number or symbol
+                if (/[0-9]/.test(value) || /[!@#$%^&*]/.test(value)) {
+                    hint3.classList.add('strong');
+                } else {
+                    hint3.classList.add('weak');
+                }
+            });
+        });
+    </script>
+{% endblock %}
