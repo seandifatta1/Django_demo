@@ -118,16 +118,18 @@
 
         document.addEventListener('DOMContentLoaded', function () {
             const simulateButton = document.querySelector('.simulate-button button.simulate');
-            simulateButton.addEventListener('click', simulateGame);
-
             const resetButton = document.querySelector('.simulate-button button.reset');
+            const seeResultsButton = document.getElementById('see-results-button');
+
+            simulateButton.addEventListener('click', simulateGame);
             resetButton.addEventListener('click', resetWinsLosses);
 
-            // Check if the favorite team has 17 games and show the "See Results" button
+            // Check if the favorite team has 17 or more games and show the "See Results" button
             const favoriteTeamWins = parseInt("{{ team.wins }}", 10);
             const favoriteTeamLosses = parseInt("{{ team.losses }}", 10);
-            if (favoriteTeamWins + favoriteTeamLosses === 17) {
-                document.getElementById('see-results-button').classList.remove('hidden');
+            if (favoriteTeamWins + favoriteTeamLosses >= 17) {
+                seeResultsButton.classList.remove('hidden');
+                simulateButton.disabled = true;
             }
         });
     </script>
@@ -179,7 +181,7 @@
     </form>
 </div>
 <div id="see-results-button" class="hidden">
-    <button type="button">See Results</button>
+    <button type="button" onclick="window.location.href='{% url 'see_results' %}'">See Results</button>
 </div>
 </body>
 </html>

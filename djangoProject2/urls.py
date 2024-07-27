@@ -27,6 +27,7 @@ urlpatterns = [
 
     path('', include('team.urls')),
     path('', include('users.urls')),  # Include the users app URLs
+    path('', include('results.urls')),  # Include the users app URLs
 
 
 ]
