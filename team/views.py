@@ -8,6 +8,14 @@ import json
 
 from djangoProject2.models import Team
 
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
+from rest_framework import status
+from django.shortcuts import get_object_or_404
+import random
+import json
+
+
 User = get_user_model()
 
 import random
@@ -52,59 +60,58 @@ def team_list(request):
         'afc_teams_by_division': afc_teams_by_division,
         'nfc_teams_by_division': nfc_teams_by_division
     })
-def handle_click(request):
-    if request.method == 'POST':
-        image_name = request.POST.get('image_name')
-        if image_name:
-            if "team_logos/" in image_name:
-                team_name = image_name.split("/")[1]
-            else:
-                team_name = image_name
 
-            team_name = team_name.split(".")[0]
+@api_view(['POST'])
+def select_team(request):
+    image_name = request.data.get('image_name')
+    if image_name:
+        if "team_logos/" in image_name:
+            team_name = image_name.split("/")[1]
+        else:
+            team_name = image_name
 
-            user = request.user
-            user.favorite_team = team_name
-            user.save()
+        team_name = team_name.split(".")[0]
 
-            return JsonResponse({'status': 'success', 'team_name': team_name})
-    return JsonResponse({'status': 'failed'})
+        user = request.user
+        user.favorite_team = team_name
+        user.save()
 
+        return Response({'status': 'success', 'team_name': team_name})
+    return Response({'status': 'failed'}, status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(['POST'])
 def simulate_game(request):
-    if request.method == 'POST':
-        all_teams = list(Team.objects.all())
-        random.shuffle(all_teams)
+    all_teams = list(Team.objects.all())
+    random.shuffle(all_teams)
 
-        winners = all_teams[:16]
-        losers = all_teams[16:]
+    winners = all_teams[:16]
+    losers = all_teams[16:]
 
-        for team in winners:
-            team.wins += 1
-            team.save()
+    for team in winners:
+        team.wins += 1
+        team.save()
 
-        for team in losers:
-            team.losses += 1
-            team.save()
+    for team in losers:
+        team.losses += 1
+        team.save()
 
-        favorite_team_name = json.loads(request.body).get('favorite_team')
-        favorite_team = get_object_or_404(Team, name=favorite_team_name)
-        teams_in_division = Team.objects.filter(division=favorite_team.division).order_by('-wins')
+    favorite_team_name = request.data.get('favorite_team')
+    favorite_team = get_object_or_404(Team, name=favorite_team_name)
+    teams_in_division = Team.objects.filter(division=favorite_team.division).order_by('-wins')
 
-        response_data = {
-            'status': 'success',
-            'teams_in_division': list(teams_in_division.values('name', 'wins', 'losses'))
-        }
+    response_data = {
+        'status': 'success',
+        'teams_in_division': list(teams_in_division.values('name', 'wins', 'losses'))
+    }
 
-        return JsonResponse(response_data)
-    return JsonResponse({'status': 'failed'}, status=400)
+    return Response(response_data)
 
+@api_view(['POST'])
 def reset_wins_losses(request):
-    if request.method == 'POST':
-        teams = Team.objects.all()
-        for team in teams:
-            team.wins = 0
-            team.losses = 0
-            team.save()
+    teams = Team.objects.all()
+    for team in teams:
+        team.wins = 0
+        team.losses = 0
+        team.save()
 
-        return JsonResponse({'status': 'success'})
-    return JsonResponse({'status': 'failed'}, status=400)
+    return Response({'status': 'success'})

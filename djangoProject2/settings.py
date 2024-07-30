@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     "custom_auth",
     "team",
     "results",
+    "rest_framework",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",

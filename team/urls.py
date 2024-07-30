@@ -38,13 +38,10 @@ team_names = [
 ]
 
 urlpatterns = [
-    path(f'teams/{team_name}/', views.team_detail, {'team_name': team_name}, name=f'{team_name}_page') for team_name in
-    team_names
+    path(f'teams/{team_name}/', views.team_detail, {'team_name': team_name}, name=f'{team_name}_page') for team_name in team_names
+] + [
+    path('teams/', views.team_list, name='team_list'),
+    path('select_team/', views.select_team, name='select_team'),
+    path('simulate_game/', views.simulate_game, name='simulate_game'),
+    path('reset_wins_losses/', views.reset_wins_losses, name='reset_wins_losses'),
 ]
-urlpatterns.append(path('teams/', views.team_list, name='team_list'))
-urlpatterns.append(path('handle-click/', views.handle_click, name='handle_click'),  # Ensure this line is correct
-                   )
-urlpatterns.append(path('simulate_game/', views.simulate_game, name='simulate_game'),
-                   )
-urlpatterns.append(path('reset_wins_losses/', views.reset_wins_losses, name='reset_wins_losses'),
-                   )

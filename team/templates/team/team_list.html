@@ -101,7 +101,7 @@
         function sendImageName(imageName) {
             const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
 
-            fetch('{% url "handle_click" %}', {
+            fetch('{% url "select_team" %}', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/x-www-form-urlencoded',
