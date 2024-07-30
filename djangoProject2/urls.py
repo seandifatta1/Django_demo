@@ -26,8 +26,8 @@ urlpatterns = [
     path('', root_redirect, name='root_redirect'),  # Root URL redirection
 
     path('', include('team.urls')),
-    path('', include('users.urls')),  # Include the users app URLs
-    path('', include('results.urls')),  # Include the users app URLs
+    path('', include('custom_auth.urls')),  # Include the custom_auth app URLs
+    path('', include('results.urls')),  # Include the custom_auth app URLs
 
 
 ]

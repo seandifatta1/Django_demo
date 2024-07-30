@@ -36,7 +36,7 @@ ALLOWED_HOSTS = []
 
 INSTALLED_APPS = [
     "djangoProject2",
-    "users",
+    "custom_auth",
     "team",
     "results",
     "django.contrib.admin",
@@ -93,7 +93,7 @@ DATABASES = {
 # Password validation
 # https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators
 # Add this line to use the custom user model
-AUTH_USER_MODEL = 'users.CustomUser'
+AUTH_USER_MODEL = 'djangoProject2.CustomUser'
 LOGIN_URL = 'login'
 LOGIN_REDIRECT_URL = 'team_list'
 
