@@ -34,4 +34,4 @@ def see_results(request):
     }
 
     # Render the template with the context
-    return render(request, 'results/see_results.html', context)
+    return render(request, 'results/results.html', context)
