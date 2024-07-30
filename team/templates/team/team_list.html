@@ -10,11 +10,17 @@
         }
         .container {
             display: flex;
-            flex-wrap: wrap;
-            align-items: stretch;
+            flex-direction: column;
+            align-items: center;
+        }
+        .row {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            margin-bottom: 20px;
         }
         .division-column {
-            flex: 1 1 25%;
+            flex: 1 1 20%; /* Adjust width to fit more columns */
             box-sizing: border-box;
             padding: 5px;
             display: flex;
@@ -63,16 +69,30 @@
         <form method="post" id="imageForm">
             {% csrf_token %}
         </form>
-        {% for division, logo_paths in teams_by_division.items %}
-        <div class="division-column">
-            <h2>{{ division }}</h2>
-            <div class="logo-container">
-                {% for logo_path in logo_paths %}
-                <img src="{% static logo_path %}" alt="{{ division }} Logo" onclick="sendImageName('{{ logo_path }}')">
-                {% endfor %}
+        <div class="row">
+            {% for division, logo_paths in afc_teams_by_division.items %}
+            <div class="division-column">
+                <h2>{{ division }}</h2>
+                <div class="logo-container">
+                    {% for logo_path in logo_paths %}
+                    <img src="{% static logo_path %}" alt="{{ division }} Logo" onclick="sendImageName('{{ logo_path }}')">
+                    {% endfor %}
+                </div>
             </div>
+            {% endfor %}
         </div>
-        {% endfor %}
+        <div class="row">
+            {% for division, logo_paths in nfc_teams_by_division.items %}
+            <div class="division-column">
+                <h2>{{ division }}</h2>
+                <div class="logo-container">
+                    {% for logo_path in logo_paths %}
+                    <img src="{% static logo_path %}" alt="{{ division }} Logo" onclick="sendImageName('{{ logo_path }}')">
+                    {% endfor %}
+                </div>
+            </div>
+            {% endfor %}
+        </div>
     </div>
 {% endblock %}
 

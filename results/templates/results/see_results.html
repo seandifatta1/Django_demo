@@ -37,6 +37,7 @@
             border: 1px solid #ddd;
             padding: 8px;
             text-align: left;
+            text-transform: capitalize; /* Capitalize first letter */
         }
 
         .team-table th {
@@ -102,7 +103,7 @@
                     <tbody>
                         {% for team in afc_top_7 %}
                         <tr>
-                            <td>{{ team.name }}</td>
+                            <td>{{ team.name|capfirst }}</td>
                             <td>{{ team.wins }}</td>
                             <td>{{ team.losses }}</td>
                         </tr>
@@ -123,7 +124,7 @@
                     <tbody>
                         {% for team in nfc_top_7 %}
                         <tr>
-                            <td>{{ team.name }}</td>
+                            <td>{{ team.name|capfirst }}</td>
                             <td>{{ team.wins }}</td>
                             <td>{{ team.losses }}</td>
                         </tr>
@@ -136,11 +137,11 @@
 
     {% if is_in_top_7 %}
     <div class="message congratulations">
-        Congratulations, the {{ favorite_team |capfirst }} has made it to the playoffs!
+        Congratulations, the {{ favorite_team|capfirst }} has made it to the playoffs!
     </div>
     {% else %}
     <div class="message consolation">
-        Unfortunately, the {{ favorite_team |capfirst }} did not qualify for the playoffs. Better luck next year!
+        Unfortunately, the {{ favorite_team|capfirst }} did not qualify for the playoffs. Better luck next year!
     </div>
     {% endif %}
 
