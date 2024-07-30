@@ -6,7 +6,7 @@ from django.http import JsonResponse
 from django.shortcuts import render, get_object_or_404
 import json
 
-from .models import Team
+from djangoProject2.models import Team
 
 User = get_user_model()
 

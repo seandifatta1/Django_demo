@@ -2,10 +2,10 @@ from django.contrib import admin
 
 # Register your models here.
 from django.contrib import admin
-from .models import Team
+from djangoProject2.models import Team
 
 from django.contrib import admin
-from .models import Team
+from djangoProject2.models import Team
 
 @admin.register(Team)
 class TeamAdmin(admin.ModelAdmin):
