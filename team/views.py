@@ -15,7 +15,8 @@ def team_detail(request, team_name):
     favorite_team = user.favorite_team
 
     team_name = team_name[0].upper() + team_name[1:].lower()
-    team = get_object_or_404(Team, name=team_name)
+    # team = get_object_or_404(Team, name=team_name)
+    team = get_object_or_404(Team, name=favorite_team)
 
     teams_in_division = Team.objects.filter(division=team.division).order_by('-wins')
     opponent = random.choice([t for t in teams_in_division if t.name != team_name])
