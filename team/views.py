@@ -45,8 +45,8 @@ def team_list(request):
         elif team['conference'] == 'NFC':
             nfc_teams_by_division[team['division']].append(team['logo_path'])
 
-    afc_teams_by_division = dict(afc_teams_by_division)
-    nfc_teams_by_division = dict(nfc_teams_by_division)
+    afc_teams_by_division = dict(sorted(afc_teams_by_division.items()))
+    nfc_teams_by_division = dict(sorted(nfc_teams_by_division.items()))
 
     return render(request, 'team/team_list.html', {
         'afc_teams_by_division': afc_teams_by_division,
