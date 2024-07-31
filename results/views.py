@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
-from djangoProject2.models import Team, CustomUser
+from core.models import Team, CustomUser
 
 
 @login_required

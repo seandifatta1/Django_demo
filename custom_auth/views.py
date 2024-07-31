@@ -15,7 +15,7 @@ def register(request):
             return redirect('team_list')  # Redirect to the team_list view
     else:
         form = RegisterForm()
-    return render(request, 'users/register.html', {'form': form})
+    return render(request, 'custom_auth/register.html', {'form': form})
 def user_login(request):
     if request.user.is_authenticated:
         return redirect('team_list')
@@ -27,5 +27,5 @@ def user_login(request):
             login(request, user)  # Log the user in
             return redirect('team_list')  # Redirect to a success page
         else:
-            return render(request, 'users/login.html', {'error': 'Invalid username or password'})
-    return render(request, 'users/login.html')
+            return render(request, 'custom_auth/login.html', {'error': 'Invalid username or password'})
+    return render(request, 'custom_auth/login.html')

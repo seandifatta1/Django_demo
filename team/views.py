@@ -7,7 +7,7 @@ from django.http import JsonResponse
 from django.shortcuts import render, get_object_or_404
 import json
 
-from djangoProject2.models import Team
+from core.models import Team
 
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
