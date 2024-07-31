@@ -1,6 +1,10 @@
+from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
-from django.contrib.auth import authenticate, login
+
 from .forms import RegisterForm
+
+
 # from .models import UserProfile
 
 
@@ -16,6 +20,8 @@ def register(request):
     else:
         form = RegisterForm()
     return render(request, 'custom_auth/register.html', {'form': form})
+
+
 def user_login(request):
     if request.user.is_authenticated:
         return redirect('team_list')
@@ -29,3 +35,8 @@ def user_login(request):
         else:
             return render(request, 'custom_auth/login.html', {'error': 'Invalid username or password'})
     return render(request, 'custom_auth/login.html')
+
+@login_required
+def logout_view(request):
+    logout(request)
+    return redirect('login')  # Redirect to the login page after logout
