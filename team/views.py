@@ -2,6 +2,7 @@ import random
 from collections import defaultdict
 
 from django.contrib.auth import get_user_model
+from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 from django.shortcuts import render, get_object_or_404
 import json
@@ -20,6 +21,7 @@ User = get_user_model()
 
 import random
 
+@login_required
 def team_detail(request, team_name):
     user = request.user
     favorite_team = user.favorite_team
@@ -40,7 +42,7 @@ def team_detail(request, team_name):
 
     return render(request, 'team/team_detail.html', context)
 
-
+@login_required
 def team_list(request):
     teams = Team.objects.all().values('division', 'logo_path', 'conference')
 
