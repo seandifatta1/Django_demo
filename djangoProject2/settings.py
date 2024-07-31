@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     "djangoProject2",
     "custom_auth",
     "team",
+    "my_team",
     "results",
     "rest_framework",
     "django.contrib.admin",

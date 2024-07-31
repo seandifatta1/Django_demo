@@ -40,7 +40,7 @@ def team_detail(request, team_name):
         'opponent': opponent,
     }
 
-    return render(request, 'team/team_detail.html', context)
+    return render(request, 'team/../my_team/team_detail.html', context)
 
 @login_required
 def team_list(request):
@@ -58,7 +58,7 @@ def team_list(request):
     afc_teams_by_division = dict(sorted(afc_teams_by_division.items()))
     nfc_teams_by_division = dict(sorted(nfc_teams_by_division.items()))
 
-    return render(request, 'team/team_list.html', {
+    return render(request, 'team/teams.html', {
         'afc_teams_by_division': afc_teams_by_division,
         'nfc_teams_by_division': nfc_teams_by_division
     })
