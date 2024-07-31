@@ -13,7 +13,7 @@
         /* Additional styles for the banner and logout button */
         .banner {
             display: flex;
-            justify-content: space-between;
+            justify-content: center;
             align-items: center;
             background-color: #002244; /* Dark blue background */
             color: white; /* White text */
@@ -30,6 +30,17 @@
             font-size: 2em;
             text-transform: uppercase;
             letter-spacing: 1px;
+        }
+
+        .title-container {
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .logout-button-container {
+            position: absolute;
+            right: 20px;
         }
 
         .logout-button {
@@ -54,11 +65,15 @@
 </head>
 <body>
     <div class="banner">
-        <h1>NFL Django Demo App</h1>
-        <form method="post" action="{% url 'logout' %}">
-            {% csrf_token %}
-            <button type="submit" class="logout-button">Logout</button>
-        </form>
+        <div class="title-container">
+            <h1>NFL Django Demo App</h1>
+        </div>
+        <div class="logout-button-container">
+            <form method="post" action="{% url 'logout' %}">
+                {% csrf_token %}
+                <button type="submit" class="logout-button">Logout</button>
+            </form>
+        </div>
     </div>
     <div class="content">
         {% block content %}
