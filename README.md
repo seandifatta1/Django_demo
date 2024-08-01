@@ -1,115 +1,86 @@
-I apologize for the confusion. Here is the entire content in markdown format:
+# Django NFL Simulation Web App
 
-markdown
-Copy code
-# NFL Django Demo App
+This Django web app allows users to select their favorite NFL team after logging in or creating an account. Users can then simulate their team's games, track their record within the division, and reset the simulation at any point. After 17 games, users can proceed to a screen displaying playoff standings.
 
-## Overview
+## App Structure
 
-The NFL Django Demo App is a web application built using Django, a high-level Python web framework. This application allows users to register, log in, and view NFL teams. It features user authentication and various other functionalities typical of a Django project.
+The app is structured into five distinct Django apps:
 
-## Installation
+1. **core**: This is the standard app, typically named after the project. It houses the models for both teams and users, as these models are utilized across multiple screens. Besides handling these models, it also manages its usual responsibilities.
 
-### Step 1: Clone the Repository
+2. **custom_auth**: This app extends the standard user profile to associate a favorite team with each user. It contains the logic for managing login and registration in the views, and also houses the necessary forms for these processes.
 
-First, clone the repository to your local machine:
+3. **team**: This app organizes the NFL teams by division and populates the template to display them visually. It provides the interface for users to select their favorite team.
+
+4. **my_team**: After a user selects their team in the team app, they are directed to this app. It shows the weekly matchups for the selected team and tracks their standings within the division.
+
+5. **results**: This app displays the playoff standings, showing which teams made the playoffs after the regular season simulations.
+
+## Installation Instructions
+
+To set up and run this Django web app, follow these steps:
+
+### Clone or Download the Repository
+
+Visit the [GitHub repository](https://github.com/seandifatta1/Django_demo).
+
+Clone the repository using Git:
 
 ```bash
-git clone https://github.com/yourusername/nfl-django-demo-app.git
-cd nfl-django-demo-app
-Step 2: Set Up a Virtual Environment
-It is recommended to use a virtual environment to manage dependencies. Here’s how you can set it up:
-
-For macOS and Linux:
-
-bash
-Copy code
-python3 -m venv venv
-source venv/bin/activate
-For Windows:
-
-bash
-Copy code
-python -m venv venv
-venv\Scripts\activate
-Step 3: Install Dependencies
-With the virtual environment activated, install the required dependencies:
-
-bash
-Copy code
-pip install -r requirements.txt
-Step 4: Run Migrations
-Apply the migrations to set up the database:
-
-bash
-Copy code
-python manage.py migrate
-Step 5: Create a Superuser
-Create a superuser to access the Django admin interface:
-
-bash
-Copy code
-python manage.py createsuperuser
-Step 6: Run the Development Server
-Start the development server to run the application:
-
-bash
-Copy code
-python manage.py runserver
-You can now access the application at http://127.0.0.1:8000.
+git clone https://github.com/seandifatta1/Django_demo.git
 ```
 
-## What the App Does
+Or download the repository as a ZIP file and extract it.
 
-- **User Authentication**: Users can register, log in, and log out.
-- **Team Display**: Displays NFL teams grouped by their respective conferences and divisions.
-- **User Management**: Admins can manage users via the Django admin interface.
+Set Up Virtual Environment
+Ensure you have Python installed. If not, download and install it from python.org.
 
-## Technical Explanation
+Navigate to the project directory:
 
-### Project Structure
+```bash
+cd Django_demo
+```
+Install venv if you haven't already:
 
-The project structure is organized as follows:
+```bash
+python -m ensurepip --upgrade
+python -m pip install --user virtualenv
+```
+Create a virtual environment:
 
-- **core**: Contains settings and configuration for the Django project.
-- **custom_auth**: Custom authentication logic and forms.
-- **my_team**: Application logic related to NFL teams.
-- **results**: Handles the results and simulations of matches.
-- **static**: Static files (CSS, JS, images).
-- **templates**: HTML templates for rendering views.
-- **manage.py**: Django's command-line utility for administrative tasks.
+```bash
+python -m venv venv
+```
+Activate the virtual environment:
 
-### Key Components
+```bash
 
-#### 1. User Authentication
+# Windows 
+venv\Scripts\activate
 
-User authentication is managed using Django’s built-in `auth` app. Custom user models and forms are implemented to extend the default functionality.
+# MacOs/Linux
+source venv/bin/activate
+```
+Install the required packages from requirements.txt:
 
-- **Forms**: Located in `custom_auth/forms.py`, custom forms handle user registration and authentication.
-- **Views**: Located in `custom_auth/views.py`, views handle user registration, login, and logout.
-- **URLs**: Routes are defined in `custom_auth/urls.py`.
+```bash
+pip install -r requirements.txt
+```
 
-#### 2. Team Display
+Run the Django App
+Apply the database migrations:
 
-The `my_team` app manages the display of NFL teams.
+```bash
+python manage.py migrate
+```
+Create a superuser to access the admin interface:
 
-- **Models**: Located in `my_team/models.py`, models define the structure of the team data.
-- **Views**: Located in `my_team/views.py`, views handle the logic for displaying teams.
-- **Templates**: HTML templates for team display are located in `templates/team/`.
+```bash
+python manage.py createsuperuser
+```
+Run the development server:
 
-#### 3. Results and Simulations
-
-The `results` app manages the simulation of matches and displays the results.
-
-- **Views**: Located in `results/views.py`, views handle match simulations and result displays.
-- **Templates**: HTML templates for results are located in `templates/results/`.
-
-### Settings and Configuration
-
-- **Settings**: The project settings are configured in `core/settings.py`.
-- **URLs**: The main URL configuration is in `core/urls.py`.
-
-### How to Extend the App
-
-- **Adding New Features**: Create a new app using `python manage.py startapp new_app`. Add your models, views, and templates in the new app.
-- **Modifying Existing Features**: Update the relevant files in the respective app directories (e.g., `my_team/views.py`, `custom_auth/forms.py`).
+```bash
+python manage.py runserver
+```
+Open a web browser and go to http://127.0.0.1:8000 to access the app.
