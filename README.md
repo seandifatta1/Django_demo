@@ -38,7 +38,11 @@ Ensure you have Python installed. If not, download and install it from python.or
 Navigate to the project directory:
 
 ```bash
-cd Django_demo
+# Windows
+chdir path\to\app\Django_demo
+
+# MacOs/Linux
+cd /path/to/app]Django_demo
 ```
 Install venv if you haven't already:
 
