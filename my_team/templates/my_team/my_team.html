@@ -158,6 +158,12 @@
         .see-results-button button:hover {
             background-color: #218838; /* Darker green */
         }
+
+        .games-played-message {
+            font-size: 16px;
+            color: #333;
+            margin-top: 20px;
+        }
     </style>
 {% endblock %}
 
@@ -207,6 +213,7 @@
             <button type="button" class="reset">Reset Wins/Losses</button>
         </form>
     </div>
+    <div class="games-played-message" id="games-played-message"></div>
     <div id="see-results-button" class="see-results-button" style="display: none;">
         <button type="button" onclick="window.location.href='{% url 'results' %}'">See Results</button>
     </div>
@@ -263,6 +270,7 @@
             const simulateButton = document.querySelector('.simulate-button button.simulate');
             const resetButton = document.querySelector('.simulate-button button.reset');
             const seeResultsButton = document.getElementById('see-results-button');
+            const gamesPlayedMessage = document.getElementById('games-played-message');
 
             simulateButton.addEventListener('click', simulateGame);
             resetButton.addEventListener('click', resetWinsLosses);
@@ -270,9 +278,14 @@
             // Check if the favorite team has 17 or more games and show the "See Results" button
             const favoriteTeamWins = parseInt("{{ team.wins }}", 10);
             const favoriteTeamLosses = parseInt("{{ team.losses }}", 10);
-            if (favoriteTeamWins + favoriteTeamLosses >= 17) {
+            const gamesPlayed = favoriteTeamWins + favoriteTeamLosses;
+
+            if (gamesPlayed >= 17) {
                 seeResultsButton.style.display = 'flex';
                 simulateButton.disabled = true;
+            } else {
+                gamesPlayedMessage.textContent = `You have played ${gamesPlayed} games. Continue simulating to reach 17 games.`;
+                gamesPlayedMessage.style.display = 'block';
             }
         });
     </script>
