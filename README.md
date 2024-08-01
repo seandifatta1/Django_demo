@@ -42,7 +42,7 @@ Navigate to the project directory:
 chdir path\to\app\Django_demo
 
 # MacOs/Linux
-cd /path/to/app]Django_demo
+cd /path/to/app/Django_demo
 ```
 Install venv if you haven't already:
 
